@@ -104,8 +104,8 @@
             <button class="filter-btn" onclick="filterCollection('gala')" style="padding: 0.75rem 2rem; background: transparent; color: var(--primary-color); border: 2px solid var(--primary-color); font-family: var(--font-accent); font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.875rem; cursor: pointer; transition: all var(--transition-normal);">
                 Gala
             </button>
-            <button class="filter-btn" onclick="filterCollection('cocktail')" style="padding: 0.75rem 2rem; background: transparent; color: var(--primary-color); border: 2px solid var(--primary-color); font-family: var(--font-accent); font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.875rem; cursor: pointer; transition: all var(--transition-normal);">
-                Cocktail
+            <button class="filter-btn" onclick="filterCollection('graduacion')" style="padding: 0.75rem 2rem; background: transparent; color: var(--primary-color); border: 2px solid var(--primary-color); font-family: var(--font-accent); font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.875rem; cursor: pointer; transition: all var(--transition-normal);">
+                Graduación
             </button>
         </div>
     </section>
@@ -113,273 +113,13 @@
     <!-- Grid de Vestidos -->
     <section style="padding: 6rem 2rem; max-width: 1400px; margin: 0 auto;">
         <div id="portfolioGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 2rem;">
-            
-            <!-- Vestido 1 -->
-            <div class="portfolio-item" data-category="novias" style="position: relative; cursor: pointer; overflow: hidden; background: var(--bg-secondary); box-shadow: var(--shadow-sm); transition: all var(--transition-normal);" onclick="openModal(1)">
-                <div style="aspect-ratio: 3/4; background: linear-gradient(135deg, rgba(201, 169, 97, 0.3), rgba(233, 69, 96, 0.2)); position: relative;">
-                    <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%); opacity: 0; transition: opacity var(--transition-normal);"></div>
-                    <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 2rem; transform: translateY(20px); opacity: 0; transition: all var(--transition-normal); color: white;">
-                        <p style="font-family: var(--font-accent); font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.5rem;">Novias</p>
-                        <h3 style="font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 0.5rem;">Elegancia Clásica</h3>
-                        <p style="font-size: 0.875rem; opacity: 0.9;">Ver detalles</p>
-                    </div>
-                </div>
-                <div style="padding: 1.5rem;">
-                    <p style="font-family: var(--font-accent); font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--secondary-color); margin-bottom: 0.5rem;">Novias</p>
-                    <h3 style="font-family: var(--font-heading); font-size: 1.25rem; color: var(--primary-color);">Elegancia Clásica</h3>
-                </div>
-            </div>
-
-            <!-- Vestido 2 -->
-            <div class="portfolio-item" data-category="quinceaneras" style="position: relative; cursor: pointer; overflow: hidden; background: var(--bg-secondary); box-shadow: var(--shadow-sm); transition: all var(--transition-normal);" onclick="openModal(2)">
-                <div style="aspect-ratio: 3/4; background: linear-gradient(135deg, rgba(233, 69, 96, 0.3), rgba(108, 92, 231, 0.2)); position: relative;">
-                    <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%); opacity: 0; transition: opacity var(--transition-normal);"></div>
-                    <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 2rem; transform: translateY(20px); opacity: 0; transition: all var(--transition-normal); color: white;">
-                        <p style="font-family: var(--font-accent); font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.5rem;">Quinceañeras</p>
-                        <h3 style="font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 0.5rem;">Sueño de Princesa</h3>
-                        <p style="font-size: 0.875rem; opacity: 0.9;">Ver detalles</p>
-                    </div>
-                </div>
-                <div style="padding: 1.5rem;">
-                    <p style="font-family: var(--font-accent); font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent-color); margin-bottom: 0.5rem;">Quinceañeras</p>
-                    <h3 style="font-family: var(--font-heading); font-size: 1.25rem; color: var(--primary-color);">Sueño de Princesa</h3>
-                </div>
-            </div>
-
-            <!-- Vestido 3 -->
-            <div class="portfolio-item" data-category="gala" style="position: relative; cursor: pointer; overflow: hidden; background: var(--bg-secondary); box-shadow: var(--shadow-sm); transition: all var(--transition-normal);" onclick="openModal(3)">
-                <div style="aspect-ratio: 3/4; background: linear-gradient(135deg, rgba(108, 92, 231, 0.3), rgba(201, 169, 97, 0.2)); position: relative;">
-                    <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%); opacity: 0; transition: opacity var(--transition-normal);"></div>
-                    <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 2rem; transform: translateY(20px); opacity: 0; transition: all var(--transition-normal); color: white;">
-                        <p style="font-family: var(--font-accent); font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.5rem;">Gala</p>
-                        <h3 style="font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 0.5rem;">Noche de Estrellas</h3>
-                        <p style="font-size: 0.875rem; opacity: 0.9;">Ver detalles</p>
-                    </div>
-                </div>
-                <div style="padding: 1.5rem;">
-                    <p style="font-family: var(--font-accent); font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--tertiary-color); margin-bottom: 0.5rem;">Gala</p>
-                    <h3 style="font-family: var(--font-heading); font-size: 1.25rem; color: var(--primary-color);">Noche de Estrellas</h3>
-                </div>
-            </div>
-
-            <!-- Vestido 4 -->
-            <div class="portfolio-item" data-category="cocktail" style="position: relative; cursor: pointer; overflow: hidden; background: var(--bg-secondary); box-shadow: var(--shadow-sm); transition: all var(--transition-normal);" onclick="openModal(4)">
-                <div style="aspect-ratio: 3/4; background: linear-gradient(135deg, rgba(201, 169, 97, 0.3), rgba(108, 92, 231, 0.2)); position: relative;">
-                    <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%); opacity: 0; transition: opacity var(--transition-normal);"></div>
-                    <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 2rem; transform: translateY(20px); opacity: 0; transition: all var(--transition-normal); color: white;">
-                        <p style="font-family: var(--font-accent); font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.5rem;">Cocktail</p>
-                        <h3 style="font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 0.5rem;">Sofisticación Urbana</h3>
-                        <p style="font-size: 0.875rem; opacity: 0.9;">Ver detalles</p>
-                    </div>
-                </div>
-                <div style="padding: 1.5rem;">
-                    <p style="font-family: var(--font-accent); font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--secondary-color); margin-bottom: 0.5rem;">Cocktail</p>
-                    <h3 style="font-family: var(--font-heading); font-size: 1.25rem; color: var(--primary-color);">Sofisticación Urbana</h3>
-                </div>
-            </div>
-
-            <!-- Vestido 5 -->
-            <div class="portfolio-item" data-category="novias" style="position: relative; cursor: pointer; overflow: hidden; background: var(--bg-secondary); box-shadow: var(--shadow-sm); transition: all var(--transition-normal);" onclick="openModal(5)">
-                <div style="aspect-ratio: 3/4; background: linear-gradient(135deg, rgba(233, 69, 96, 0.2), rgba(201, 169, 97, 0.3)); position: relative;">
-                    <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%); opacity: 0; transition: opacity var(--transition-normal);"></div>
-                    <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 2rem; transform: translateY(20px); opacity: 0; transition: all var(--transition-normal); color: white;">
-                        <p style="font-family: var(--font-accent); font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.5rem;">Novias</p>
-                        <h3 style="font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 0.5rem;">Romance Moderno</h3>
-                        <p style="font-size: 0.875rem; opacity: 0.9;">Ver detalles</p>
-                    </div>
-                </div>
-                <div style="padding: 1.5rem;">
-                    <p style="font-family: var(--font-accent); font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--secondary-color); margin-bottom: 0.5rem;">Novias</p>
-                    <h3 style="font-family: var(--font-heading); font-size: 1.25rem; color: var(--primary-color);">Romance Moderno</h3>
-                </div>
-            </div>
-
-            <!-- Vestido 6 -->
-            <div class="portfolio-item" data-category="gala" style="position: relative; cursor: pointer; overflow: hidden; background: var(--bg-secondary); box-shadow: var(--shadow-sm); transition: all var(--transition-normal);" onclick="openModal(6)">
-                <div style="aspect-ratio: 3/4; background: linear-gradient(135deg, rgba(108, 92, 231, 0.3), rgba(233, 69, 96, 0.2)); position: relative;">
-                    <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%); opacity: 0; transition: opacity var(--transition-normal);"></div>
-                    <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 2rem; transform: translateY(20px); opacity: 0; transition: all var(--transition-normal); color: white;">
-                        <p style="font-family: var(--font-accent); font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.5rem;">Gala</p>
-                        <h3 style="font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 0.5rem;">Alta Distinción</h3>
-                        <p style="font-size: 0.875rem; opacity: 0.9;">Ver detalles</p>
-                    </div>
-                </div>
-                <div style="padding: 1.5rem;">
-                    <p style="font-family: var(--font-accent); font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--tertiary-color); margin-bottom: 0.5rem;">Gala</p>
-                    <h3 style="font-family: var(--font-heading); font-size: 1.25rem; color: var(--primary-color);">Alta Distinción</h3>
-                </div>
-            </div>
-
-        </div>
-    </section>
-
-    <!-- =============================================
-         SECCIÓN DE COMENTARIOS CON LOGIN REQUERIDO
-         ============================================= -->
-    <section id="comentarios-section" style="padding: 5rem 2rem; background: var(--bg-light, #fafaf8); border-top: 1px solid var(--border-color);">
-        <div style="max-width: 800px; margin: 0 auto;">
-            <div style="text-align: center; margin-bottom: 3rem;">
-                <p style="font-family: var(--font-accent); font-size: 0.875rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--secondary-color); margin-bottom: 0.75rem;">Opiniones</p>
-                <h2 style="font-family: var(--font-heading); font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 400; color: var(--primary-color);">Comentarios de clientas</h2>
-            </div>
-
-            <!-- Lista de comentarios -->
-            <div id="comentariosLista" style="margin-bottom: 2.5rem;"></div>
-
-            <!-- Agregar comentario -->
-            <div id="comentarioFormWrapper">
-                <!-- Si NO está logueada: prompt de login -->
-                <div id="comentarioLoginPrompt" class="comment-login-prompt" style="display:none; background: var(--bg-medium, #f0ede5); border: 1px solid var(--secondary-color); border-radius: 8px; padding: 1.5rem; text-align: center;">
-                    <p style="margin-bottom: 1rem; color: var(--text-dark); font-size: 1rem;">
-                        Para dejar un comentario necesitas iniciar sesión
-                    </p>
-                    <button onclick="openAuthModal('login')" style="padding: 0.75rem 2rem; background: var(--secondary-color); color: white; border: none; border-radius: 4px; font-weight: 600; cursor: pointer; font-size: 1rem;">
-                        Iniciar sesión
-                    </button>
-                    <span style="margin: 0 0.75rem; color: var(--text-medium);">o</span>
-                    <button onclick="openAuthModal('register')" style="padding: 0.75rem 2rem; background: transparent; color: var(--secondary-color); border: 2px solid var(--secondary-color); border-radius: 4px; font-weight: 600; cursor: pointer; font-size: 1rem;">
-                        Registrarse
-                    </button>
-                </div>
-
-                <!-- Si SÍ está logueada: formulario de comentario -->
-                <div id="comentarioForm" style="display:none; background: white; border: 1px solid var(--border-color, #ddd); border-radius: 8px; padding: 1.5rem;" class="comment-form-box">
-                    <h3 style="font-family: var(--font-accent); font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--primary-color); margin-bottom: 1.25rem;">
-                        Agregar comentario
-                    </h3>
-                    <div style="margin-bottom: 1rem;">
-                        <label style="display:block; margin-bottom: 0.4rem; font-weight: 600; font-size: 0.875rem; color: var(--text-medium);">Tu calificación</label>
-                        <div id="starRating" style="display: inline-flex; gap: 0.4rem;">
-                            <button type="button" data-star="1" onclick="setRating(1)" class="rating-btn" style="width:36px;height:36px;border:2px solid var(--border-color,#ddd);border-radius:4px;background:transparent;cursor:pointer;font-weight:700;font-size:0.9rem;color:var(--text-medium);">1</button>
-                            <button type="button" data-star="2" onclick="setRating(2)" class="rating-btn" style="width:36px;height:36px;border:2px solid var(--border-color,#ddd);border-radius:4px;background:transparent;cursor:pointer;font-weight:700;font-size:0.9rem;color:var(--text-medium);">2</button>
-                            <button type="button" data-star="3" onclick="setRating(3)" class="rating-btn" style="width:36px;height:36px;border:2px solid var(--border-color,#ddd);border-radius:4px;background:transparent;cursor:pointer;font-weight:700;font-size:0.9rem;color:var(--text-medium);">3</button>
-                            <button type="button" data-star="4" onclick="setRating(4)" class="rating-btn" style="width:36px;height:36px;border:2px solid var(--border-color,#ddd);border-radius:4px;background:transparent;cursor:pointer;font-weight:700;font-size:0.9rem;color:var(--text-medium);">4</button>
-                            <button type="button" data-star="5" onclick="setRating(5)" class="rating-btn" style="width:36px;height:36px;border:2px solid var(--border-color,#ddd);border-radius:4px;background:transparent;cursor:pointer;font-weight:700;font-size:0.9rem;color:var(--text-medium);">5</button>
-                        </div>
-                        <span id="ratingLabel" style="margin-left:0.75rem;font-size:0.85rem;color:var(--text-medium);"></span>
-                    </div>
-                    <div style="margin-bottom: 1rem;">
-                        <label style="display:block; margin-bottom: 0.4rem; font-weight: 600; font-size: 0.875rem; color: var(--text-medium);">Comentario</label>
-                        <textarea id="comentarioTexto" rows="4" placeholder="Comparte tu experiencia con Floré Designs..." 
-                            style="width: 100%; padding: 0.875rem; border: 1px solid var(--border-color, #ddd); border-radius: 4px; font-size: 0.95rem; resize: vertical; font-family: var(--font-body); background: transparent; color: inherit;"
-                            required></textarea>
-                    </div>
-                    <div style="text-align: right;">
-                        <button onclick="publicarComentario()" style="padding: 0.875rem 2rem; background: var(--secondary-color); color: white; border: none; border-radius: 4px; font-weight: 600; cursor: pointer; font-size: 0.95rem;">
-                            Publicar comentario
-                        </button>
-                    </div>
-                </div>
-            </div>
+            <!-- Las tarjetas se generan dinámicamente desde dressesData en js/portfolio.js (renderPortfolioGrid) -->
         </div>
     </section>
 
 </main>
 
-<script>
-// =============================================
-//   SISTEMA DE COMENTARIOS - portafolio.html
-// =============================================
-let comentarioRating = 0;
 
-function setRating(n) {
-    comentarioRating = n;
-    const labels = ['', 'Muy malo', 'Malo', 'Regular', 'Bueno', 'Excelente'];
-    const btns = document.querySelectorAll('#starRating .rating-btn');
-    btns.forEach((btn, i) => {
-        const selected = i < n;
-        btn.style.background = selected ? 'var(--secondary-color)' : 'transparent';
-        btn.style.color = selected ? 'white' : 'var(--text-medium)';
-        btn.style.borderColor = selected ? 'var(--secondary-color)' : 'var(--border-color, #ddd)';
-    });
-    const lbl = document.getElementById('ratingLabel');
-    if (lbl) lbl.textContent = labels[n] || '';
-}
-
-function renderComentarios() {
-    const lista = document.getElementById('comentariosLista');
-    const comentarios = JSON.parse(localStorage.getItem('comentariosPortafolio') || '[]');
-    if (comentarios.length === 0) {
-        lista.innerHTML = '<p style="text-align:center; color:var(--text-medium); padding:2rem 0;">Sé la primera en dejar un comentario.</p>';
-        return;
-    }
-    lista.innerHTML = comentarios.slice().reverse().map(c => `
-        <div class="comment-card" style="background: white; border: 1px solid var(--border-color, #eee); border-radius: 8px; padding: 1.25rem 1.5rem; margin-bottom: 1rem;">
-            <div style="display:flex; align-items:center; gap: 0.75rem; margin-bottom: 0.75rem;">
-                <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--secondary-color),var(--accent-color));display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:0.9rem;flex-shrink:0;">
-                    ${c.autor.charAt(0).toUpperCase()}
-                </div>
-                <div>
-                    <strong class="comment-author" style="display:block; font-family:var(--font-accent); font-size:0.875rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--primary-color);">${c.autor}</strong>
-                    <span style="font-size:0.75rem; color:var(--text-medium);">${c.fecha}</span>
-                </div>
-                <div style="margin-left:auto; font-size:0.8rem; font-weight:700; color:var(--secondary-color); background:var(--bg-medium,#f5f0e8); padding:0.2rem 0.6rem; border-radius:4px;">${c.rating}/5</div>
-            </div>
-            <p class="comment-text" style="color:var(--text-medium); line-height:1.6; margin:0;">${c.texto}</p>
-        </div>
-    `).join('');
-}
-
-function publicarComentario() {
-    const texto = document.getElementById('comentarioTexto').value.trim();
-    if (!texto) { alert('Por favor escribe tu comentario'); return; }
-    if (comentarioRating === 0) { alert('Por favor selecciona una calificación'); return; }
-
-    const currentUser = auth && auth.getCurrentUser ? auth.getCurrentUser() : null;
-    if (!currentUser) {
-        updateCommentUI();
-        return;
-    }
-
-    const comentarios = JSON.parse(localStorage.getItem('comentariosPortafolio') || '[]');
-    comentarios.push({
-        id: Date.now(),
-        autor: currentUser.nombre || currentUser.email,
-        texto,
-        rating: comentarioRating,
-        fecha: new Date().toLocaleDateString('es-MX', { year:'numeric', month:'long', day:'numeric' })
-    });
-    localStorage.setItem('comentariosPortafolio', JSON.stringify(comentarios));
-
-    document.getElementById('comentarioTexto').value = '';
-    setRating(0);
-    comentarioRating = 0;
-    renderComentarios();
-
-    // Mostrar notificación
-    const n = document.createElement('div');
-    n.style.cssText = 'position:fixed;bottom:2rem;right:2rem;padding:1rem 1.5rem;border-radius:8px;font-weight:600;z-index:99999;color:white;background:#4caf50;box-shadow:0 4px 16px rgba(0,0,0,0.2);';
-    n.textContent = '¡Comentario publicado!';
-    document.body.appendChild(n);
-    setTimeout(() => n.remove(), 3000);
-}
-
-function updateCommentUI() {
-    const isLoggedIn = auth && auth.isLoggedIn ? auth.isLoggedIn() : false;
-    const prompt = document.getElementById('comentarioLoginPrompt');
-    const form = document.getElementById('comentarioForm');
-    if (isLoggedIn) {
-        prompt.style.display = 'none';
-        form.style.display = 'block';
-    } else {
-        prompt.style.display = 'block';
-        form.style.display = 'none';
-    }
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    renderComentarios();
-    // Wait for auth to be ready
-    setTimeout(() => {
-        updateCommentUI();
-        // Listen for auth changes
-        window.addEventListener('authStateChange', updateCommentUI);
-        window.addEventListener('storage', e => {
-            if (e.key === 'currentUser') updateCommentUI();
-        });
-    }, 300);
-});
-</script>
 
 <!-- Modal de Detalles -->
 <div id="detailModal" class="modal" style="display: none;">
@@ -421,7 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <button type="submit" class="btn" style="width: 100%; margin-top: 1rem;">Iniciar sesión</button>
                     <div style="text-align: center; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color); color: var(--text-medium); font-size: 0.875rem;">
-                        <p>Para probar: <strong>demo@floredesigns.com</strong> / <strong>demo123</strong></p></div>
+                        <p>¿No tienes cuenta? Usa la pestaña "Registrarse".</p></div>
                     </div>
                 </form>
             </div>
@@ -485,15 +225,6 @@ document.addEventListener('DOMContentLoaded', () => {
 .portfolio-item:hover {
     transform: translateY(-8px);
     box-shadow: var(--shadow-lg);
-}
-
-.portfolio-item:hover > div:first-child > div:first-child {
-    opacity: 1;
-}
-
-.portfolio-item:hover > div:first-child > div:last-child {
-    transform: translateY(0);
-    opacity: 1;
 }
 
 .filter-btn:hover {

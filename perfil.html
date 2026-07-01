@@ -198,7 +198,7 @@
                     </button>
 
                     <div style="text-align: center; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color); color: var(--text-medium); font-size: 0.875rem;">
-                        <p>Para probar: <strong>demo@floredesigns.com</strong> / <strong>demo123</strong></p>
+                        <p>¿No tienes cuenta? Usa la pestaña "Registrarse".</p>
                         <p style="margin-top: 0.5rem;">No tienes cuenta? <a href="#" onclick="switchAuthTab('register'); return false;" style="color: var(--primary-color); font-weight: 500;">Registrate aqui</a></p>
                     </div>
                 </form>
@@ -387,26 +387,20 @@ function loadProfileData() {
 
 function updateProfile(event) {
     event.preventDefault();
-    
+
     const updatedUser = {
         ...auth.getCurrentUser(),
         nombre: document.getElementById('perfilNombre').value,
         email: document.getElementById('perfilEmail').value,
         telefono: document.getElementById('perfilTelefono').value
     };
-    
-    // Actualizar en localStorage
+
+    // NOTA: esto solo actualiza la sesión en memoria del navegador.
+    // Falta crear api/auth/update-profile.php para que el cambio se
+    // guarde de verdad en la base de datos (próximo paso pendiente).
     auth.saveUser(updatedUser);
-    
-    // Actualizar también en el array de usuarios
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const userIndex = users.findIndex(u => u.id === updatedUser.id);
-    if (userIndex !== -1) {
-        users[userIndex] = { ...users[userIndex], ...updatedUser };
-        localStorage.setItem('users', JSON.stringify(users));
-    }
-    
-    showNotification('Perfil actualizado exitosamente', 'success');
+
+    showNotification('Perfil actualizado en esta sesión (aún no se guarda en la base de datos)', 'info');
     loadProfileData();
 }
 

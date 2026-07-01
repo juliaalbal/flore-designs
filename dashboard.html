@@ -164,7 +164,8 @@
 ===================================================== */
 
 document.addEventListener("DOMContentLoaded", async () => {
-    auth.requerirAuth(); // Protección de ruta: redirige a index si no hay sesión
+    await new Promise(resolve => auth.onReady(resolve)); // Espera a que la sesión termine de verificarse
+    if (!auth.requerirAuth()) return; // Protección de ruta: redirige a index si no hay sesión
 
     // Inicia animaciones de scroll
     AnimationsModule.iniciar();
