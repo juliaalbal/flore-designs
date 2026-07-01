@@ -1635,12 +1635,20 @@ body, header, section, main, footer,
 .modal-dress-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 3rem;
+    gap: 0;
+}
+
+.modal-dress-grid > div:last-child {
+    padding: 3rem 3rem 3rem 1.5rem;
 }
 
 @media (max-width: 768px) {
     .modal-dress-grid {
         grid-template-columns: 1fr;
+    }
+
+    .modal-dress-grid > div:last-child {
+        padding: 1.5rem;
     }
 }
 

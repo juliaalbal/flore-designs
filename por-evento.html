@@ -106,13 +106,7 @@
             <button class="close-modal" onclick="closeAuthModal()">×</button>
             <h2>Bienvenido</h2>
             
-            <!-- Pestaña Admin arriba del todo -->
-            <div style="border-bottom: 2px solid #1a1a2e; margin-bottom: 0.5rem; padding-bottom: 0;">
-                <button id="adminTab" class="modal-tab" onclick="switchAuthTab('admin')" style="width: 100%; padding: 0.6rem; background: #1a1a2e; color: #C9A961; border: none; font-family: var(--font-accent); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; cursor: pointer; transition: background 0.2s;">
-                    Acceso Administrador
-                </button>
-            </div>
-            <!-- Pestanas de usuario -->
+                        <!-- Pestanas de usuario -->
             <div class="modal-tabs">
                 <button id="loginTab" class="modal-tab active" onclick="switchAuthTab('login')">Iniciar sesion</button>
                 <button id="registerTab" class="modal-tab" onclick="switchAuthTab('register')">Registrarse</button>
@@ -215,27 +209,7 @@
             </div>
 
 
-            <!-- Formulario de inicio de sesion como Administrador -->
-            <div id="adminForm" class="tab-content" style="display: none;">
-                <div style="text-align: center; margin-bottom: 1.5rem; padding: 1rem; background: #1a1a2e; border-radius: 8px;">
-                    <p style="color: #C9A961; font-family: var(--font-accent); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; margin: 0;">
-                        Area Restringida - Solo Personal Autorizado
-                    </p>
-                </div>
-                <form onsubmit="handleLoginAdmin(event)">
-                    <div class="form-group">
-                        <label for="adminUsuario">Usuario</label>
-                        <input type="text" id="adminUsuario" placeholder="Usuario administrador" required autocomplete="off">
-                    </div>
-                    <div class="form-group">
-                        <label for="adminPassword">Contrasena</label>
-                        <input type="password" id="adminPassword" placeholder="Contrasena de administrador" required>
-                    </div>
-                    <button type="submit" class="btn" style="width: 100%; margin-top: 1rem; background: #1a1a2e; border-color: #1a1a2e;">
-                        Ingresar al Panel
-                    </button>
-                </form>
-            </div>
+            
         </div>
     </div>
 </div>

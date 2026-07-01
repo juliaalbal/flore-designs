@@ -96,17 +96,6 @@ const auth = (() => {
         return { exito: false, error: body.error || 'Correo o contraseña incorrectos' };
     }
 
-    async function loginAdmin(usuario, password) {
-        const { ok, body } = await post('login-admin.php', { usuario, password });
-        if (ok && body.usuario) {
-            currentUser = body.usuario;
-            actualizarUI();
-            document.dispatchEvent(new CustomEvent('authStateChange'));
-            return true;
-        }
-        return false;
-    }
-
     async function register(nombre, email, password, telefono) {
         const { ok, body } = await post('register.php', { nombre, email, password, telefono });
         if (ok && body.usuario) {
@@ -170,7 +159,6 @@ const auth = (() => {
 
     return {
         login,
-        loginAdmin,
         register,
         logout,
         isLoggedIn,
