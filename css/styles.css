@@ -1516,3 +1516,265 @@ body, header, section, main, footer,
     color: #b0a89a !important;
 }
 
+
+/* ========================================
+   PORTAFOLIO - TARJETAS CON IMAGEN REAL
+   RF-01.1, RF-01.3, RF-01.4
+   ======================================== */
+.portfolio-item {
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    background: var(--bg-secondary);
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition-normal);
+    border-radius: 4px;
+}
+
+.portfolio-item-media {
+    position: relative;
+    aspect-ratio: 3/4;
+    overflow: hidden;
+}
+
+.portfolio-item-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform var(--transition-normal);
+}
+
+.portfolio-item:hover .portfolio-item-media img {
+    transform: scale(1.05);
+}
+
+.portfolio-tag {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    z-index: 2;
+    padding: 0.4rem 0.9rem;
+    border-radius: 999px;
+    font-family: var(--font-accent);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    box-shadow: var(--shadow-sm);
+}
+
+.tag-disponible {
+    background: var(--secondary-color);
+    color: white;
+}
+
+.tag-portafolio {
+    background: rgba(26, 26, 46, 0.85);
+    color: white;
+}
+
+.portfolio-item-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 55%);
+    opacity: 0;
+    transition: opacity var(--transition-normal);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 2rem;
+    color: white;
+}
+
+.portfolio-item:hover .portfolio-item-overlay {
+    opacity: 1;
+}
+
+.portfolio-item-category {
+    font-family: var(--font-accent);
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+}
+
+.portfolio-item-title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.portfolio-item-cta {
+    font-size: 0.875rem;
+    opacity: 0.9;
+}
+
+.portfolio-item-footer {
+    padding: 1.5rem;
+}
+
+.portfolio-item-category-small {
+    font-family: var(--font-accent);
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--secondary-color);
+    margin-bottom: 0.5rem;
+}
+
+.portfolio-item-title-small {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    color: var(--primary-color);
+}
+
+/* ========================================
+   MODAL DE DETALLE DE VESTIDO
+   ======================================== */
+.modal-dress-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+}
+
+@media (max-width: 768px) {
+    .modal-dress-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.modal-dress-image {
+    width: 100%;
+    aspect-ratio: 3/4;
+    object-fit: cover;
+    border-radius: 4px;
+    display: block;
+}
+
+.modal-dress-category {
+    font-family: var(--font-accent);
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--secondary-color);
+    margin-bottom: 0.5rem;
+}
+
+.modal-dress-title {
+    font-family: var(--font-heading);
+    font-size: 2.25rem;
+    color: var(--primary-color);
+    margin-bottom: 0.75rem;
+}
+
+.modal-dress-description {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--text-medium);
+    margin-bottom: 1.5rem;
+}
+
+.modal-materials-box {
+    padding: 1.5rem;
+    background: var(--bg-accent);
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+
+.modal-materials-title {
+    font-family: var(--font-accent);
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.modal-materials-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.modal-materials-list li {
+    padding: 0.5rem 0;
+    color: var(--text-medium);
+    border-bottom: 1px solid var(--border-light);
+}
+
+.modal-materials-list li:last-child {
+    border-bottom: none;
+}
+
+.modal-tiempo-box {
+    margin-bottom: 1.5rem;
+}
+
+.modal-tiempo-label {
+    color: var(--text-light);
+    font-size: 0.875rem;
+    margin-bottom: 0.25rem;
+}
+
+.modal-tiempo-value {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.modal-cta-box {
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.modal-cta-available {
+    background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
+    color: white;
+}
+
+.modal-cta-portfolio {
+    background: var(--bg-accent);
+    border: 1px solid var(--border-color);
+}
+
+.modal-cta-label {
+    font-family: var(--font-accent);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+    opacity: 0.9;
+}
+
+.modal-cta-portfolio .modal-cta-label {
+    color: var(--primary-color);
+}
+
+.modal-cta-text {
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.modal-cta-portfolio .modal-cta-text {
+    color: var(--text-medium);
+}
+
+.modal-actions {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.modal-dress-details {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+    font-size: 0.875rem;
+    line-height: 1.7;
+    color: var(--text-medium);
+}
