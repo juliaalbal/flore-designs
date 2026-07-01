@@ -166,7 +166,6 @@ function openModal(dressId) {
     // que son unicamente portafolio no ofrecen cotizacion.
     const ctaBlock = dress.disponibleEncargar ? `
         <div class="modal-cta-box modal-cta-available">
-            <p class="modal-cta-label">Disponible para encargar</p>
             <p class="modal-cta-text">¿Te gustaría un diseño similar a la medida?</p>
         </div>
         <div class="modal-actions">
@@ -179,7 +178,6 @@ function openModal(dressId) {
         </div>
     ` : `
         <div class="modal-cta-box modal-cta-portfolio">
-            <p class="modal-cta-label">Pieza de portafolio</p>
             <p class="modal-cta-text">Esta pieza fue confeccionada en exclusiva para una clienta y no está disponible para encargar tal cual.</p>
         </div>
         <div class="modal-actions">
