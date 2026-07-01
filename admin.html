@@ -12,19 +12,23 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/animations.css">
 </head>
-<body style="background: var(--bg-primary);">
-<!-- Proteccion del panel: solo administradores pueden acceder -->
-<!-- Este script corre ANTES que cualquier otro para bloquear acceso -->
+<body style="background: var(--bg-primary); visibility: hidden;">
+<!-- Proteccion del panel: solo administradores pueden acceder (RF-05.1) -->
+<!-- Este script corre ANTES que cualquier otro y consulta la sesion PHP real -->
 <script>
-(function() {
-    var raw = localStorage.getItem('currentUser');
-    if (!raw) {
-        alert('Acceso restringido. Inicia sesion como administrador.');
-        window.location.href = 'index.html';
-    }
-    var user = JSON.parse(raw);
-    if (!user || !user.isAdmin) {
-        alert('No tienes permisos para acceder al panel de administracion.');
+(async function() {
+    try {
+        const res = await fetch('api/auth/session.php', { credentials: 'include' });
+        const data = await res.json();
+        const usuario = data.usuario;
+        if (!usuario || usuario.rol !== 'administrador') {
+            alert('Acceso restringido. Inicia sesión como administrador para ver este panel.');
+            window.location.href = 'index.html';
+            return;
+        }
+        document.body.style.visibility = 'visible';
+    } catch (err) {
+        alert('No se pudo verificar tu sesión. Revisa que el servidor PHP esté corriendo e intenta de nuevo.');
         window.location.href = 'index.html';
     }
 })();

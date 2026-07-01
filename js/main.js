@@ -1,149 +1,9 @@
 // ========================================
-// SISTEMA DE AUTENTICACIÓN (Simulado)
-// NOTA: La clase AuthSystem ya no se usa para login/registro.
-// Esas funciones ahora las maneja auth.api.js con PHP + MySQL.
-// Esta clase se mantiene solo para compatibilidad con el resto
-// del código que usa auth.isLoggedIn(), auth.isAdmin(), etc.
+// SISTEMA DE AUTENTICACIÓN
+// El objeto global `auth` (login, registro, sesión, roles)
+// lo define js/auth.api.js, que debe cargarse ANTES que este
+// archivo en cada página. Ver ese archivo para la implementación.
 // ========================================
-
-class AuthSystem {
-    constructor() {
-        this.currentUser = this.loadUser();
-        this.updateUI();
-    }
-
-    loadUser() {
-        const userData = localStorage.getItem('currentUser');
-        return userData ? JSON.parse(userData) : null;
-    }
-
-    saveUser(user) {
-        localStorage.setItem('currentUser', JSON.stringify(user));
-        this.currentUser = user;
-    }
-
-    isLoggedIn() {
-        return this.currentUser !== null;
-    }
-
-    login(email, password) {
-        // Simulacion - en produccion esto se valida con el backend
-        const users = JSON.parse(localStorage.getItem('users') || '[]');
-        const user = users.find(u => u.email === email && u.password === password);
-
-        if (user) {
-            this.saveUser({
-                id: user.id,
-                nombre: user.nombre,
-                email: user.email,
-                telefono: user.telefono,
-                isAdmin: user.isAdmin || false
-            });
-            this.updateUI();
-            return true;
-        }
-        return false;
-    }
-
-    // Inicio de sesion exclusivo para administrador.
-    // Credenciales: usuario "admin" / contrasena "admin123"
-    loginAdmin(usuario, password) {
-        if (usuario === 'admin' && password === 'admin123') {
-            this.saveUser({
-                id: 0,
-                nombre: 'Administrador',
-                email: 'admin@floredesigns.com',
-                telefono: '',
-                isAdmin: true
-            });
-            this.updateUI();
-            return true;
-        }
-        return false;
-    }
-
-    isAdmin() {
-        return this.currentUser !== null && this.currentUser.isAdmin === true;
-    }
-
-    register(userData) {
-        const users = JSON.parse(localStorage.getItem('users') || '[]');
-        
-        // Verificar si el email ya existe
-        if (users.some(u => u.email === userData.email)) {
-            return { success: false, message: 'Este email ya está registrado' };
-        }
-
-        // Crear nuevo usuario
-        const newUser = {
-            id: Date.now(),
-            ...userData,
-            fechaRegistro: new Date().toISOString()
-        };
-
-        users.push(newUser);
-        localStorage.setItem('users', JSON.stringify(users));
-
-        return { success: true, message: 'Usuario registrado exitosamente' };
-    }
-
-    logout() {
-        localStorage.removeItem('currentUser');
-        this.currentUser = null;
-        this.updateUI();
-        window.location.href = 'index.html';
-    }
-
-    updateUI() {
-        const perfilMenu       = document.querySelector('.perfil-menu');
-        const iniciarSesionBtn = document.querySelector('.iniciar-sesion-btn');
-        const registroBtn      = document.querySelector('.registro-btn');
-
-        if (this.isLoggedIn()) {
-            if (perfilMenu)       perfilMenu.style.display = 'block';
-            if (iniciarSesionBtn) iniciarSesionBtn.style.display = 'none';
-            if (registroBtn)      registroBtn.style.display = 'none';
-
-            const perfilLink   = document.querySelector('.perfil-menu > a');
-            const subMenu      = document.querySelector('.perfil-menu .menu-secundario');
-            const adminItem    = document.querySelector('.admin-menu-item');
-            const clienteItems = document.querySelectorAll('.cliente-menu-item');
-
-            if (this.isAdmin()) {
-                // Administrador: solo ve "Panel Admin" y "Cerrar sesion"
-                // Oculta los items de cliente
-                clienteItems.forEach(el => el.style.display = 'none');
-                if (adminItem) adminItem.style.display = 'block';
-                if (perfilLink) perfilLink.textContent = 'Administrador';
-            } else {
-                // Usuario normal: ve "Mis datos", "Mis pedidos", "Cerrar sesion"
-                clienteItems.forEach(el => el.style.display = 'block');
-                if (adminItem) adminItem.style.display = 'none';
-                if (perfilLink) perfilLink.textContent = this.currentUser.nombre;
-            }
-        } else {
-            if (perfilMenu)       perfilMenu.style.display = 'none';
-            if (iniciarSesionBtn) iniciarSesionBtn.style.display = 'block';
-            if (registroBtn)      registroBtn.style.display = 'block';
-        }
-    }
-
-    getCurrentUser() {
-        return this.currentUser;
-    }
-
-    requireAuth() {
-        if (!this.isLoggedIn()) {
-            const modal = document.getElementById('authModal');
-            if (modal) {
-                modal.style.display = 'flex';
-                document.getElementById('loginTab').click();
-            }
-            return false;
-        }
-        return true;
-    }
-}
 
 // ========================================
 // SISTEMA DE GESTIÓN DE CITAS
@@ -322,12 +182,19 @@ async function handleLogin(event) {
 }
 
 // Manejo del formulario de inicio de sesion como administrador
-function handleLoginAdmin(event) {
+async function handleLoginAdmin(event) {
     event.preventDefault();
     const usuario  = document.getElementById('adminUsuario').value;
     const password = document.getElementById('adminPassword').value;
 
-    if (auth.loginAdmin(usuario, password)) {
+    const btn = event.target.querySelector('button[type=submit]');
+    if (btn) { btn.disabled = true; btn.textContent = 'Verificando...'; }
+
+    const exito = await auth.loginAdmin(usuario, password);
+
+    if (btn) { btn.disabled = false; btn.textContent = 'Ingresar al Panel'; }
+
+    if (exito) {
         showNotification('Bienvenido, Administrador.', 'success');
         closeAuthModal();
         event.target.reset();
@@ -398,11 +265,11 @@ async function handleRegister(event) {
     if (btn) { btn.disabled = false; btn.textContent = 'Crear cuenta'; }
 
     if (result.exito) {
-        showNotification(result.mensaje || 'Cuenta creada correctamente', 'success');
+        showNotification('¡Cuenta creada! Ya iniciaste sesión.', 'success');
+        closeAuthModal();
         event.target.reset();
         if (typeof CaptchaModule !== "undefined") CaptchaModule.resetear();
-        // Cambiar al tab de login para que inicie sesion
-        switchAuthTab('login');
+        window.location.reload();
     } else {
         showNotification(result.error || 'Error al registrar', 'error');
     }

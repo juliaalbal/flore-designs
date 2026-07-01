@@ -3,6 +3,13 @@
 //  FloreDesigns - Configuración y conexión a la base de datos
 //  Lee credenciales desde .env — nunca hardcodeadas.
 //  Aplica headers de seguridad HTTP en cada respuesta.
+//
+//  NOTA: la autenticación del proyecto usa sesiones PHP nativas
+//  ($_SESSION), tal como se definió en el documento de alcance
+//  (3.2 "NO incluye autenticación multifactor") y en la
+//  justificación de arquitectura (6.1 "sesiones PHP"). Este
+//  archivo ya NO define JWT ni MFA: esas piezas pertenecían a
+//  una versión anterior que se descartó a propósito.
 // ============================================================
 
 function cargarEnv(): void {
@@ -26,30 +33,39 @@ define('DB_USER',    $_ENV['DB_USER']    ?? 'root');
 define('DB_PASS',    $_ENV['DB_PASS']    ?? '');
 define('DB_CHARSET', $_ENV['DB_CHARSET'] ?? 'utf8mb4');
 
-define('JWT_SECRET',           $_ENV['JWT_SECRET']           ?? 'cambiar_en_produccion');
-define('JWT_EXPIRA_MINUTOS',   (int)($_ENV['JWT_EXPIRA_MINUTOS']   ?? 15));
-define('JWT_REFRESH_DIAS',     (int)($_ENV['JWT_REFRESH_DIAS']     ?? 7));
-define('MAX_INTENTOS_LOGIN',   (int)($_ENV['MAX_INTENTOS_LOGIN']   ?? 5));
-define('BLOQUEO_MINUTOS',      (int)($_ENV['BLOQUEO_MINUTOS']      ?? 15));
-define('MFA_EXPIRA_MINUTOS',   (int)($_ENV['MFA_EXPIRA_MINUTOS']   ?? 10));
-define('RESET_EXPIRA_MINUTOS', (int)($_ENV['RESET_EXPIRA_MINUTOS'] ?? 30));
 define('APP_ENV', $_ENV['APP_ENV'] ?? 'development');
 define('APP_URL', $_ENV['APP_URL'] ?? 'http://localhost');
 
-// ── Headers de seguridad (Práctica 2 — Parte 8) ────────────
+// ── Sesión PHP nativa (RF-02.3) ────────────────────────────
+// Se inicia una sola vez, antes de cualquier salida.
+function iniciarSesion(): void {
+    if (session_status() === PHP_SESSION_NONE) {
+        session_set_cookie_params([
+            'lifetime' => 0,
+            'path'     => '/',
+            'samesite' => 'Lax',
+            'httponly' => true,
+            'secure'   => APP_ENV === 'production',
+        ]);
+        session_start();
+    }
+}
+
+// ── Headers de seguridad ────────────────────────────────────
 function aplicarHeadersSeguridad(): void {
     header('X-Frame-Options: SAMEORIGIN');
     header('X-Content-Type-Options: nosniff');
     header('X-XSS-Protection: 1; mode=block');
-    header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;");
     header('Referrer-Policy: strict-origin-when-cross-origin');
     if (APP_ENV === 'production') header('Strict-Transport-Security: max-age=31536000; includeSubDomains');
     $origin = APP_ENV === 'production' ? APP_URL : 'http://localhost';
     header("Access-Control-Allow-Origin: $origin");
+    header('Access-Control-Allow-Credentials: true');
     header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
     header('Access-Control-Allow-Headers: Content-Type, Authorization');
 }
 aplicarHeadersSeguridad();
+iniciarSesion();
 
 class Database {
     private static ?PDO $conexion = null;
@@ -85,4 +101,15 @@ function obtenerBodyJSON(): array {
     $body = file_get_contents('php://input');
     if (empty($body)) return [];
     return json_decode($body, true) ?? [];
+}
+
+// Devuelve el usuario autenticado (sin password_hash) o null.
+// Centraliza la verificación de sesión para todos los endpoints.
+function usuarioAutenticado(): ?array {
+    if (empty($_SESSION['usuario_id'])) return null;
+    $db = Database::conectar();
+    $stmt = $db->prepare('SELECT id_usuario, nombre, email, telefono, rol, fecha_registro FROM usuarios WHERE id_usuario = ?');
+    $stmt->execute([$_SESSION['usuario_id']]);
+    $usuario = $stmt->fetch();
+    return $usuario ?: null;
 }
