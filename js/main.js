@@ -123,16 +123,14 @@ function closeAuthModal() {
 function switchAuthTab(tab) {
     const loginForm    = document.getElementById('loginForm');
     const registerForm = document.getElementById('registerForm');
-    const adminForm    = document.getElementById('adminForm');
     const loginTab     = document.getElementById('loginTab');
     const registerTab  = document.getElementById('registerTab');
-    const adminTab     = document.getElementById('adminTab');
 
     // Oculta todos los formularios
-    [loginForm, registerForm, adminForm].forEach(f => {
+    [loginForm, registerForm].forEach(f => {
         if (f) { f.classList.remove('active'); f.style.display = 'none'; }
     });
-    [loginTab, registerTab, adminTab].forEach(t => {
+    [loginTab, registerTab].forEach(t => {
         if (t) t.classList.remove('active');
     });
 
@@ -143,10 +141,6 @@ function switchAuthTab(tab) {
     } else if (tab === 'register') {
         if (registerForm) { registerForm.classList.add('active'); registerForm.style.display = 'block'; }
         if (registerTab)  registerTab.classList.add('active');
-
-    } else if (tab === 'admin') {
-        if (adminForm) { adminForm.classList.add('active'); adminForm.style.display = 'block'; }
-        if (adminTab)  adminTab.classList.add('active');
     }
 }
 
@@ -174,34 +168,8 @@ async function handleLogin(event) {
         closeAuthModal();
         event.target.reset();
         window.location.reload();
-    } else if (result.mfa) {
-        // auth.api.js ya muestra el panel MFA automáticamente
     } else {
         showNotification(result.error || 'Email o contraseña incorrectos', 'error');
-    }
-}
-
-// Manejo del formulario de inicio de sesion como administrador
-async function handleLoginAdmin(event) {
-    event.preventDefault();
-    const usuario  = document.getElementById('adminUsuario').value;
-    const password = document.getElementById('adminPassword').value;
-
-    const btn = event.target.querySelector('button[type=submit]');
-    if (btn) { btn.disabled = true; btn.textContent = 'Verificando...'; }
-
-    const exito = await auth.loginAdmin(usuario, password);
-
-    if (btn) { btn.disabled = false; btn.textContent = 'Ingresar al Panel'; }
-
-    if (exito) {
-        showNotification('Bienvenido, Administrador.', 'success');
-        closeAuthModal();
-        event.target.reset();
-        // Redirige directo al panel de administracion
-        window.location.href = 'admin.html';
-    } else {
-        showNotification('Usuario o contrasena de administrador incorrectos', 'error');
     }
 }
 
