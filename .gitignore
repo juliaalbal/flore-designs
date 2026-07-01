@@ -1,0 +1,9 @@
+# Variables de entorno con credenciales (RNF-02)
+.env
+
+# Dependencias PHP (si se agrega Composer/PHPMailer más adelante)
+vendor/
+
+# Archivos de editor
+.vscode/
+.DS_Store
