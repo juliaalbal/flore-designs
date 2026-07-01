@@ -1,70 +1,149 @@
+/* =====================================================
+   MODULO DE PORTAFOLIO - portfolio.js
+   Fuente unica de datos de los vestidos (RNF-05).
+   Cada vestido define si esta disponible para encargar
+   (RF-01.3 / RF-01.4) o si es unicamente una pieza ya
+   realizada para una clienta (solo portafolio).
+===================================================== */
+
 // Datos de los vestidos
 const dressesData = {
     1: {
         category: 'novias',
         title: 'Elegancia Clásica',
+        imagen: 'img/vestidos/novia1.jpg',
         description: 'Vestido de novia en corte princesa con encaje francés importado y cola de 3 metros. Delicados detalles de pedrería Swarovski en el corpiño.',
         materials: ['Encaje francés', 'Tul de seda', 'Pedrería Swarovski', 'Satén italiano'],
         details: 'Este diseño combina la elegancia atemporal con detalles modernos. El corpiño estructurado en encaje francés está adornado con pedrería Swarovski aplicada a mano, mientras que la falda en capas de tul de seda crea un volumen romántico.',
         tiempo: '3-4 meses',
-        status: 'realizado'
+        disponibleEncargar: false
     },
     2: {
         category: 'quinceaneras',
         title: 'Sueño de Princesa',
+        imagen: 'img/vestidos/quince1.jpg',
         description: 'Vestido de quinceañera en tono rosa champagne con bordados a mano en hilo de seda. Falda con 7 capas de tul para máximo volumen.',
         materials: ['Tul premium', 'Bordado de seda', 'Cristales Preciosa', 'Organza'],
         details: 'Diseñado para hacer realidad el sueño de toda quinceañera. Los bordados florales hechos a mano con hilo de seda crean un efecto tridimensional único. La falda multicapa garantiza un volumen espectacular.',
         tiempo: '2-3 meses',
-        status: 'realizado'
+        disponibleEncargar: true
     },
     3: {
         category: 'gala',
         title: 'Noche de Estrellas',
+        imagen: 'img/vestidos/gala1.jpg',
         description: 'Vestido de gala en corte sirena con lentejuelas bordadas en degradado. Escote asimétrico y abertura lateral dramática.',
         materials: ['Lentejuelas premium', 'Crepé de seda', 'Tul bordado', 'Forro de satén'],
         details: 'Un diseño espectacular para brillar en cualquier evento de gala. Las lentejuelas están aplicadas en un patrón degradado que crea un efecto de movimiento hipnótico. El corte sirena realza la silueta.',
         tiempo: '6-8 semanas',
-        status: 'realizado'
+        disponibleEncargar: false
     },
     4: {
-        category: 'cocktail',
+        category: 'graduacion',
         title: 'Sofisticación Urbana',
-        description: 'Vestido cocktail en mikado estructurado con detalles arquitectónicos. Largo midi con bolsillos ocultos y espalda descubierta.',
+        imagen: 'img/vestidos/grad1.jpg',
+        description: 'Vestido midi estructurado con detalles arquitectónicos, ideal para graduación. Diseño con espalda descubierta y caída fluida.',
         materials: ['Mikado japonés', 'Forro de seda', 'Detalles metálicos'],
-        details: 'La fusión perfecta entre elegancia y practicidad. Confeccionado en mikado japonés de alta calidad con estructura interna que mantiene la forma perfecta. Los bolsillos ocultos añaden funcionalidad sin comprometer el diseño.',
+        details: 'La fusión perfecta entre elegancia y practicidad. Confeccionado en mikado japonés de alta calidad con estructura interna que mantiene la forma perfecta, pensado para quienes buscan un look sofisticado y cómodo.',
         tiempo: '4-6 semanas',
-        status: 'realizado'
+        disponibleEncargar: true
     },
     5: {
         category: 'novias',
         title: 'Romance Moderno',
+        imagen: 'img/vestidos/novia2.jpg',
         description: 'Vestido de novia minimalista en línea A con escote en V profundo. Confeccionado en crepé italiano con botones cubiertos en toda la espalda.',
         materials: ['Crepé italiano', 'Satén duquesa', 'Botones forrados'],
         details: 'Para la novia que busca elegancia sin excesos. Las líneas limpias del crepé italiano crean una silueta sofisticada, mientras que los botones forrados a mano en la espalda añaden un toque de romanticismo clásico.',
         tiempo: '3-4 meses',
-        status: 'realizado'
+        disponibleEncargar: true
     },
     6: {
         category: 'gala',
         title: 'Alta Distinción',
-        description: 'Vestido de gala con sobrefalda desmontable. Corsé bordado con técnica de alta costura y falda en mikado con pliegues estructurados.',
-        materials: ['Mikado de seda', 'Organza bordada', 'Tul ilusión', 'Pedrería fina'],
-        details: 'Dos looks en uno: elegancia clásica con la sobrefalda y un corte más moderno al retirarla. El corsé presenta bordados elaborados con técnicas de alta costura parisina. Ideal para eventos donde quieras impactar.',
-        tiempo: '4-5 meses',
-        status: 'realizado'
+        imagen: 'img/vestidos/gala2.jpg',
+        description: 'Vestido midi en tono rosa con falda en capas y silueta favorecedora. Corte limpio con escote corazón.',
+        materials: ['Mikado de seda', 'Organza', 'Forro de satén'],
+        details: 'Un diseño versátil para quien busca elegancia sin perder comodidad. La falda en capas aporta movimiento y la silueta entallada favorece la figura. Ideal para eventos donde quieras destacar con sutileza.',
+        tiempo: '4-5 semanas',
+        disponibleEncargar: true
+    },
+    7: {
+        category: 'novias',
+        title: 'Velo de Ensueño',
+        imagen: 'img/vestidos/novia3.jpg',
+        description: 'Vestido de novia de corte recto en satén fluido, ideal para bodas en recintos históricos. Silueta limpia que acompaña el movimiento.',
+        materials: ['Satén fluido', 'Forro de seda'],
+        details: 'Pensado para la novia que prefiere la sobriedad antes que el exceso de adornos. El satén fluido cae con naturalidad y permite que el velo y el entorno sean protagonistas.',
+        tiempo: '3 meses',
+        disponibleEncargar: true
+    },
+    8: {
+        category: 'quinceaneras',
+        title: 'Tul y Color',
+        imagen: 'img/vestidos/quince2.jpg',
+        description: 'Vestido de quinceañera en tono celeste con cuerpo bordado de flores y falda amplia de tul, fotografiado en exteriores.',
+        materials: ['Tul', 'Bordado floral', 'Organza'],
+        details: 'Una pieza pensada para quinceañeras que sueñan con un vestido de cuento, con un cuerpo bordado a mano y una falda de gran volumen que se mueve con cada paso.',
+        tiempo: '2-3 meses',
+        disponibleEncargar: false
+    },
+    9: {
+        category: 'graduacion',
+        title: 'Brillo Nocturno',
+        imagen: 'img/vestidos/grad2.jpg',
+        description: 'Vestido con pedrería en tono plata de manga larga, perfecto para una graduación o evento nocturno.',
+        materials: ['Tela con pedrería', 'Forro interno', 'Mangas en malla bordada'],
+        details: 'Confeccionado para captar la luz en cada movimiento. El bordado de pedrería cubre toda la pieza y las mangas en malla bordada aportan un toque elegante sin perder comodidad.',
+        tiempo: '5-6 semanas',
+        disponibleEncargar: false
     }
 };
+
+/* --------------------------------------------------
+   RENDERIZADO DEL GRID DE PORTAFOLIO (RF-01.1, RF-01.3)
+   Se construye dinamicamente desde dressesData para
+   evitar tarjetas hardcodeadas que se desincronizan
+   de los datos reales (causa de inconsistencias previas).
+-------------------------------------------------- */
+function renderPortfolioGrid() {
+    const grid = document.getElementById('portfolioGrid');
+    if (!grid) return;
+
+    grid.innerHTML = Object.keys(dressesData).map(id => {
+        const dress = dressesData[id];
+        const tagLabel = dress.disponibleEncargar ? 'Disponible para encargar' : 'Pieza de portafolio';
+        const tagClass = dress.disponibleEncargar ? 'tag-disponible' : 'tag-portafolio';
+
+        return `
+            <div class="portfolio-item" data-category="${dress.category}" onclick="openModal(${id})">
+                <div class="portfolio-item-media">
+                    <img src="${dress.imagen}" alt="${dress.title} - ${getCategoryName(dress.category)}" loading="lazy">
+                    <span class="portfolio-tag ${tagClass}">${tagLabel}</span>
+                    <div class="portfolio-item-overlay">
+                        <p class="portfolio-item-category">${getCategoryName(dress.category)}</p>
+                        <h3 class="portfolio-item-title">${dress.title}</h3>
+                        <p class="portfolio-item-cta">Ver detalles</p>
+                    </div>
+                </div>
+                <div class="portfolio-item-footer">
+                    <p class="portfolio-item-category-small">${getCategoryName(dress.category)}</p>
+                    <h3 class="portfolio-item-title-small">${dress.title}</h3>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
 
 // Función para filtrar colección
 function filterCollection(category) {
     const items = document.querySelectorAll('.portfolio-item');
     const buttons = document.querySelectorAll('.filter-btn');
-    
+
     // Actualizar botones activos
     buttons.forEach(btn => btn.classList.remove('active'));
     event.target.classList.add('active');
-    
+
     // Filtrar items
     items.forEach(item => {
         if (category === 'all' || item.dataset.category === category) {
@@ -81,76 +160,76 @@ function openModal(dressId) {
     const dress = dressesData[dressId];
     const modal = document.getElementById('detailModal');
     const content = document.getElementById('modalContent');
-    
+
+    // RF-01.3 / RF-01.4: la llamada a la accion solo existe para
+    // piezas marcadas como disponibles para encargar. Las piezas
+    // que son unicamente portafolio no ofrecen cotizacion.
+    const ctaBlock = dress.disponibleEncargar ? `
+        <div class="modal-cta-box modal-cta-available">
+            <p class="modal-cta-label">Disponible para encargar</p>
+            <p class="modal-cta-text">¿Te gustaría un diseño similar a la medida?</p>
+        </div>
+        <div class="modal-actions">
+            <button onclick="requestQuote(${dressId})" class="btn" style="flex: 1;">
+                Quiero algo similar
+            </button>
+            <button onclick="closeDetailModal()" class="btn btn-secondary" style="flex: 1;">
+                Cerrar
+            </button>
+        </div>
+    ` : `
+        <div class="modal-cta-box modal-cta-portfolio">
+            <p class="modal-cta-label">Pieza de portafolio</p>
+            <p class="modal-cta-text">Esta pieza fue confeccionada en exclusiva para una clienta y no está disponible para encargar tal cual.</p>
+        </div>
+        <div class="modal-actions">
+            <button onclick="closeDetailModal()" class="btn btn-secondary" style="flex: 1;">
+                Cerrar
+            </button>
+        </div>
+    `;
+
     content.innerHTML = `
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem;">
+        <div class="modal-dress-grid">
             <!-- Imagen del vestido -->
             <div>
-                <div style="aspect-ratio: 3/4; background: linear-gradient(135deg, ${getCategoryGradient(dress.category)}); border-radius: 4px; margin-bottom: 1.5rem;"></div>
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;">
-                    <div style="aspect-ratio: 1; background: linear-gradient(135deg, ${getCategoryGradient(dress.category)}); border-radius: 4px; opacity: 0.7;"></div>
-                    <div style="aspect-ratio: 1; background: linear-gradient(135deg, ${getCategoryGradient(dress.category)}); border-radius: 4px; opacity: 0.5;"></div>
-                    <div style="aspect-ratio: 1; background: linear-gradient(135deg, ${getCategoryGradient(dress.category)}); border-radius: 4px; opacity: 0.3;"></div>
-                </div>
+                <img src="${dress.imagen}" alt="${dress.title}" class="modal-dress-image">
             </div>
-            
+
             <!-- Detalles -->
             <div>
-                <p style="font-family: var(--font-accent); font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--secondary-color); margin-bottom: 0.5rem;">
-                    ${getCategoryName(dress.category)}
-                </p>
-                <h2 style="font-family: var(--font-heading); font-size: 2.5rem; color: var(--primary-color); margin-bottom: 1.5rem;">
-                    ${dress.title}
-                </h2>
-                
-                <p style="font-size: 1rem; line-height: 1.8; color: var(--text-medium); margin-bottom: 2rem;">
+                <p class="modal-dress-category">${getCategoryName(dress.category)}</p>
+                <h2 class="modal-dress-title">${dress.title}</h2>
+
+                <span class="portfolio-tag ${dress.disponibleEncargar ? 'tag-disponible' : 'tag-portafolio'}" style="position: static; display: inline-block; margin-bottom: 1.25rem;">
+                    ${dress.disponibleEncargar ? 'Disponible para encargar' : 'Pieza de portafolio'}
+                </span>
+
+                <p class="modal-dress-description">
                     ${dress.description}
                 </p>
-                
-                <div style="padding: 1.5rem; background: var(--bg-accent); border-radius: 8px; margin-bottom: 2rem;">
-                    <h4 style="font-family: var(--font-accent); font-size: 0.875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--primary-color); margin-bottom: 1rem;">
-                        Materiales Premium
-                    </h4>
-                    <ul style="list-style: none; padding: 0;">
-                        ${dress.materials.map(material => `
-                            <li style="padding: 0.5rem 0; color: var(--text-medium); border-bottom: 1px solid var(--border-light); display: flex; align-items: center; gap: 0.5rem;">
-                                ${material}
-                            </li>
-                        `).join('')}
+
+                <div class="modal-materials-box">
+                    <h4 class="modal-materials-title">Materiales</h4>
+                    <ul class="modal-materials-list">
+                        ${dress.materials.map(material => `<li>${material}</li>`).join('')}
                     </ul>
                 </div>
-                
-                <div style="margin-bottom: 2rem;">
-                    <p style="color: var(--text-light); font-size: 0.875rem; margin-bottom: 0.5rem;">Tiempo de confección estimado</p>
-                    <p style="font-size: 1.125rem; font-weight: 600; color: var(--primary-color);">${dress.tiempo}</p>
+
+                <div class="modal-tiempo-box">
+                    <p class="modal-tiempo-label">Tiempo de confección estimado</p>
+                    <p class="modal-tiempo-value">${dress.tiempo}</p>
                 </div>
-                
-                <div style="padding: 1.5rem; background: linear-gradient(135deg, var(--secondary-color), var(--accent-color)); border-radius: 8px; color: white; margin-bottom: 2rem; text-align: center;">
-                    <p style="font-size: 0.875rem; opacity: 0.9; margin-bottom: 0.5rem;">Diseno Personalizado</p>
-                    <p style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 400; line-height: 1.4;">
-                        Este vestido ha sido confeccionado a la medida
-                    </p>
-                    <p style="font-size: 0.875rem; opacity: 0.95; margin-top: 0.75rem;">
-                        Solicita tu cotización personalizada
-                    </p>
-                </div>
-                
-                <div style="display: flex; gap: 1rem;">
-                    <button onclick="requestQuote('${dress.title}')" class="btn" style="flex: 1;">
-                        Solicitar Cotización
-                    </button>
-                    <button onclick="closeDetailModal()" class="btn btn-secondary" style="flex: 1;">
-                        Cerrar
-                    </button>
-                </div>
-                
-                <p style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color); font-size: 0.875rem; line-height: 1.7; color: var(--text-medium);">
+
+                ${ctaBlock}
+
+                <p class="modal-dress-details">
                     ${dress.details}
                 </p>
             </div>
         </div>
     `;
-    
+
     modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
 }
@@ -163,28 +242,23 @@ function closeDetailModal() {
 }
 
 // Función para solicitar cotización
-function requestQuote(dressTitle) {
-    if (!auth.isLoggedIn()) {
+// RF-01.4: dirige al formulario de cita, no solo muestra un aviso.
+function requestQuote(dressId) {
+    if (typeof auth === 'undefined' || !auth.isLoggedIn || !auth.isLoggedIn()) {
         closeDetailModal();
         openAuthModal('login');
-        showNotification('Inicia sesión para solicitar una cotización', 'info');
+        if (typeof showNotification === 'function') {
+            showNotification('Inicia sesión para agendar una cita', 'info');
+        }
         return;
     }
-    
-    // Aquí normalmente se abriría un formulario de cotización
-    showNotification(`Solicitud de cotización para "${dressTitle}" enviada. Te contactaremos pronto.`, 'success');
-    closeDetailModal();
-}
 
-// Función auxiliar para obtener gradiente según categoría
-function getCategoryGradient(category) {
-    const gradients = {
-        'novias': 'rgba(201, 169, 97, 0.3), rgba(233, 69, 96, 0.2)',
-        'quinceaneras': 'rgba(233, 69, 96, 0.3), rgba(108, 92, 231, 0.2)',
-        'gala': 'rgba(108, 92, 231, 0.3), rgba(201, 169, 97, 0.2)',
-        'cocktail': 'rgba(201, 169, 97, 0.3), rgba(108, 92, 231, 0.2)'
-    };
-    return gradients[category] || gradients.novias;
+    const dress = dressesData[dressId];
+    const params = new URLSearchParams({
+        tipo: 'cotizacion',
+        prenda: dress.title
+    });
+    window.location.href = `citas.html?${params.toString()}`;
 }
 
 // Función auxiliar para obtener nombre de categoría
@@ -193,10 +267,12 @@ function getCategoryName(category) {
         'novias': 'Novias',
         'quinceaneras': 'Quinceañeras',
         'gala': 'Gala',
-        'cocktail': 'Cocktail'
+        'graduacion': 'Graduación'
     };
     return names[category] || category;
 }
+
+document.addEventListener('DOMContentLoaded', renderPortfolioGrid);
 
 // Cerrar modal con ESC
 document.addEventListener('keydown', function(e) {
