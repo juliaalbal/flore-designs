@@ -24,6 +24,19 @@ solicitudes de citas y gestionar clientes mediante un panel de administración.
 - `feature/admin`: panel de administración.
 - `feature/comentarios`: sección de comentarios con moderación.
 - `feature/autenticacion`: registro, login, sesiones PHP y roles.
+- `feature/admin-seguro`: elimina el login público de administrador; el acceso al panel se decide por el rol de la sesión, no por un formulario separado.
+
+## Cómo funciona el acceso de administrador
+
+No existe un formulario de login separado para administradores. Cualquier
+persona con una cuenta cuyo `rol` sea `administrador` en la base de datos
+inicia sesión con el mismo formulario que un cliente. El sistema detecta el
+rol automáticamente y muestra la opción "Panel Admin" en el menú.
+
+Para convertir una cuenta en administrador:
+```sql
+UPDATE usuarios SET rol = 'administrador' WHERE email = 'tu_correo@ejemplo.com';
+```
 
 ## Cómo correr el proyecto localmente
 
