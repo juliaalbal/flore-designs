@@ -241,7 +241,7 @@
                     </button>
 
                     <div style="text-align: center; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color); color: var(--text-medium); font-size: 0.875rem;">
-                        <p>Para probar: <strong>demo@floredesigns.com</strong> / <strong>demo123</strong></p>
+                        <p>¿No tienes cuenta? Usa la pestaña "Registrarse".</p>
                         <p style="margin-top: 0.5rem;">No tienes cuenta? <a href="#" onclick="switchAuthTab('register'); return false;" style="color: var(--primary-color); font-weight: 500;">Registrate aqui</a></p>
                     </div>
                 </form>
@@ -354,11 +354,26 @@
 document.addEventListener('DOMContentLoaded', function() {
     const today = new Date().toISOString().split('T')[0];
     document.getElementById('fechaCita').setAttribute('min', today);
-    
-    // Mostrar citas del usuario si está logueado
-    if (auth.isLoggedIn()) {
-        displayUserAppointments();
+
+    // Prellenado al llegar desde "Quiero algo similar" en el portafolio (RF-01.4)
+    const params = new URLSearchParams(window.location.search);
+    const prenda = params.get('prenda');
+    const tipo = params.get('tipo');
+    if (tipo) {
+        const tipoSelect = document.getElementById('tipoCita');
+        if (tipoSelect) tipoSelect.value = tipo;
     }
+    if (prenda) {
+        const comentarios = document.getElementById('comentariosCita');
+        if (comentarios) comentarios.value = `Me interesa un diseño similar a: ${prenda}`;
+    }
+
+    // Mostrar citas del usuario si está logueado
+    auth.onReady(() => {
+        if (auth.isLoggedIn()) {
+            displayUserAppointments();
+        }
+    });
 });
 
 function displayUserAppointments() {
