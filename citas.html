@@ -161,9 +161,14 @@
 
             <div class="info-card" style="margin-bottom: 1.5rem;">
                 <h3>Ubicacion</h3>
-                <p style="color: var(--text-medium); line-height: 1.8;">
-                   
+                <p style="color: var(--text-medium); line-height: 1.8; margin-bottom: 1rem;">
+                    Calle Pedro Coronel 123, Col. Bosque Norte<br>
+                    Aguascalientes, Ags., México
                 </p>
+                <div id="atelierMap" style="width: 100%; height: 220px; border-radius: 8px; overflow: hidden; background: var(--bg-accent);"></div>
+                <a href="https://www.google.com/maps/dir/?api=1&destination=21.8818,-102.2957" target="_blank" rel="noopener" class="btn btn-secondary" style="display: block; text-align: center; margin-top: 1rem;">
+                    Cómo llegar
+                </a>
             </div>
 
             <div class="info-card" style="margin-bottom: 1.5rem;">
@@ -323,6 +328,7 @@
 <script src="js/captcha.js"></script>
 <script src="js/auth.api.js"></script>
 <script src="js/main.js"></script>
+<script src="js/maps.js"></script>
 <script>
 // Configurar fecha mínima (hoy)
 document.addEventListener('DOMContentLoaded', function() {
