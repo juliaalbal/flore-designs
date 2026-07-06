@@ -38,11 +38,28 @@ Para convertir una cuenta en administrador:
 UPDATE usuarios SET rol = 'administrador' WHERE email = 'tu_correo@ejemplo.com';
 ```
 
+## Servicios web integrados
+
+### API propia (REST)
+Endpoints en `api/auth/` para autenticación, con sesiones PHP nativas:
+
+| Endpoint | Método | Descripción |
+|---|---|---|
+| `api/auth/register.php` | POST | Registra un nuevo cliente (RF-02.1, RF-02.2) |
+| `api/auth/login.php` | POST | Inicia sesión y valida el rol activo (RF-02.3, RF-02.4) |
+| `api/auth/logout.php` | POST | Cierra la sesión activa (RF-02.5) |
+| `api/auth/session.php` | GET | Devuelve el usuario autenticado en la sesión actual |
+| `api/maps/config.php` | GET | Expone la API key de Google Maps de forma centralizada |
+
+### API de terceros
+**Google Maps JavaScript API** — muestra la ubicación real del atelier con un mapa interactivo y botón de direcciones en `citas.html`. Ver `js/maps.js`.
+
 ## Cómo correr el proyecto localmente
 
 1. Instala XAMPP (o equivalente) con PHP 8+ y MySQL.
 2. Crea la base de datos y ejecuta `api/config/schema.sql`.
 3. Copia `.env.example` a `.env` y ajusta `DB_HOST`, `DB_USER`, `DB_PASS` a tu MySQL local.
-4. Coloca el proyecto en `htdocs/` (o la carpeta pública de tu servidor).
-5. Regístrate desde el sitio; para volverte administrador ejecuta:
+4. Para el mapa de ubicación en `citas.html`, agrega tu propia `MAPS_API_KEY` en `.env` (consíguela en https://console.cloud.google.com/google/maps-apis y restríngela por dominio).
+5. Coloca el proyecto en `htdocs/` (o la carpeta pública de tu servidor).
+6. Regístrate desde el sitio; para volverte administrador ejecuta:
    `UPDATE usuarios SET rol='administrador' WHERE email='tu_correo@ejemplo.com';`
