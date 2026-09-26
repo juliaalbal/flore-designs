@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Variables de entorno con credenciales (RNF-02)
 .env
 
@@ -8,3 +9,8 @@ vendor/
 .vscode/
 .DS_Store
 .git.zip
+=======
+vendor/ 
+.env 
+config/db.php 
+>>>>>>> 47426c7d1d99dd836890575841f338383c8a39c9
