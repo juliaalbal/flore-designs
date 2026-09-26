@@ -243,7 +243,7 @@ async function handleRegister(event) {
     }
 }
 
-function handleAppointment(event) {
+async function handleAppointment(event) {
     event.preventDefault();
 
     if (!auth.requireAuth()) {
@@ -257,13 +257,24 @@ function handleAppointment(event) {
         comentarios: document.getElementById('comentariosCita').value
     };
 
-    const result = appointmentSystem.createAppointment(appointmentData);
-    
-    if (result.success) {
-        showNotification(result.message, 'success');
-        event.target.reset();
-    } else {
-        showNotification(result.message, 'error');
+    try {
+        const res = await fetch('api/citas/crear.php', {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(appointmentData)
+        });
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+            showNotification('Cita agendada exitosamente', 'success');
+            event.target.reset();
+            if (typeof displayUserAppointments === 'function') displayUserAppointments();
+        } else {
+            showNotification(data.error || 'Error al agendar la cita', 'error');
+        }
+    } catch (err) {
+        showNotification('No se pudo conectar con el servidor.', 'error');
     }
 }
 
@@ -337,7 +348,12 @@ document.addEventListener('DOMContentLoaded', function() {
 // ========================================
 
 function formatDate(dateString) {
-    const date = new Date(dateString);
+    if (!dateString) return '';
+    // Si es una fecha simple 'YYYY-MM-DD' (como las que vienen de MySQL para
+    // citas), se construye en hora local para evitar que el desfase UTC la
+    // muestre un día antes de la fecha real.
+    const esFechaSimple = /^\d{4}-\d{2}-\d{2}$/.test(dateString);
+    const date = esFechaSimple ? new Date(dateString + 'T00:00:00') : new Date(dateString);
     return date.toLocaleDateString('es-MX', { 
         year: 'numeric', 
         month: 'long', 

@@ -1,5 +1,7 @@
 // Admin Panel JavaScript
 
+let citasCache = []; // guarda la última respuesta de api/admin/citas.php para viewCita()/guardarCita()/eliminarCita()
+
 document.addEventListener('DOMContentLoaded', function() {
     loadDashboardData();
     loadAllData();
@@ -44,15 +46,22 @@ function showSection(sectionName, clickedEl) {
     }
 }
 
-function loadDashboardData() {
+async function loadDashboardData() {
     // Cargar estadísticas
-    const allAppointments = JSON.parse(localStorage.getItem('appointments') || '[]');
     const allOrders = JSON.parse(localStorage.getItem('orders') || '[]');
     const allUsers = JSON.parse(localStorage.getItem('users') || '[]');
-    
-    // Citas pendientes
-    const citasPendientes = allAppointments.filter(apt => apt.estado === 'Pendiente').length;
-    document.getElementById('citasPendientes').textContent = citasPendientes;
+
+    // Citas pendientes (dato real, desde la base de datos)
+    try {
+        const res = await fetch('api/admin/citas.php', { credentials: 'include' });
+        const data = await res.json();
+        const citasReales = res.ok ? (data.citas || []) : [];
+        citasCache = citasReales;
+        const citasPendientes = citasReales.filter(c => c.estado === 'pendiente').length;
+        document.getElementById('citasPendientes').textContent = citasPendientes;
+    } catch (err) {
+        document.getElementById('citasPendientes').textContent = '—';
+    }
     
     // Pedidos activos
     const pedidosActivos = allOrders.filter(order => order.estado !== 'Entregado').length;
@@ -119,12 +128,27 @@ function loadActividadReciente() {
     `).join('');
 }
 
-function loadCitasData() {
+async function loadCitasData() {
     const citasDiv = document.getElementById('citasLista');
-    const appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    
-    if (appointments.length === 0) {
+    citasDiv.innerHTML = `<div style="text-align: center; padding: 4rem; color: var(--text-medium);"><p>Cargando citas...</p></div>`;
+
+    let citas = [];
+    try {
+        const res = await fetch('api/admin/citas.php', { credentials: 'include' });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Error al obtener citas');
+        citas = data.citas || [];
+        citasCache = citas;
+    } catch (err) {
+        citasDiv.innerHTML = `
+            <div style="text-align: center; padding: 4rem; color: var(--text-medium);">
+                <p>No se pudieron cargar las citas (${err.message})</p>
+            </div>
+        `;
+        return;
+    }
+
+    if (citas.length === 0) {
         citasDiv.innerHTML = `
             <div style="text-align: center; padding: 4rem; color: var(--text-medium);">
                 <p>No hay citas registradas</p>
@@ -132,7 +156,9 @@ function loadCitasData() {
         `;
         return;
     }
-    
+
+    const colorEstado = { pendiente: '#ff9800', confirmada: '#4caf50', cancelada: '#dc3545' };
+
     citasDiv.innerHTML = `
         <table style="width: 100%; border-collapse: collapse;">
             <thead>
@@ -146,27 +172,24 @@ function loadCitasData() {
                 </tr>
             </thead>
             <tbody>
-                ${appointments.map(apt => {
-                    const user = users.find(u => u.id === apt.userId);
-                    return `
-                        <tr style="border-bottom: 1px solid var(--border-light);">
-                            <td style="padding: 1rem;">${user ? user.nombre : 'Cliente Desconocido'}</td>
-                            <td style="padding: 1rem;">${getTipoCitaLabel(apt.tipo)}</td>
-                            <td style="padding: 1rem;">${formatDate(apt.fecha)}</td>
-                            <td style="padding: 1rem;">${apt.hora}</td>
-                            <td style="padding: 1rem;">
-                                <span style="padding: 0.375rem 0.875rem; background: ${apt.estado === 'Pendiente' ? '#ff9800' : apt.estado === 'Confirmada' ? '#4caf50' : apt.estado === 'Completada' ? '#2196f3' : '#dc3545'}; color: white; border-radius: 12px; font-size: 0.75rem; font-weight: 600;">
-                                    ${apt.estado}
-                                </span>
-                            </td>
-                            <td style="padding: 1rem;">
-                                <button onclick="viewCita(${apt.id})" style="padding: 0.5rem 1rem; background: var(--secondary-color); color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.875rem; font-weight: 600;">
-                                    Ver / Editar
-                                </button>
-                            </td>
-                        </tr>
-                    `;
-                }).join('')}
+                ${citas.map(cita => `
+                    <tr style="border-bottom: 1px solid var(--border-light);">
+                        <td style="padding: 1rem;">${cita.cliente_nombre} <span style="color:var(--text-light);font-size:0.8125rem;">(${cita.cliente_email})</span></td>
+                        <td style="padding: 1rem;">${getTipoCitaLabel(cita.tipo)}</td>
+                        <td style="padding: 1rem;">${formatDate(cita.fecha)}</td>
+                        <td style="padding: 1rem;">${cita.hora}</td>
+                        <td style="padding: 1rem;">
+                            <span style="padding: 0.375rem 0.875rem; background: ${colorEstado[cita.estado] || '#999'}; color: white; border-radius: 12px; font-size: 0.75rem; font-weight: 600; text-transform: capitalize;">
+                                ${cita.estado}
+                            </span>
+                        </td>
+                        <td style="padding: 1rem;">
+                            <button onclick="viewCita(${cita.id_cita})" style="padding: 0.5rem 1rem; background: var(--secondary-color); color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.875rem; font-weight: 600;">
+                                Ver / Editar
+                            </button>
+                        </td>
+                    </tr>
+                `).join('')}
             </tbody>
         </table>
     `;
@@ -221,10 +244,25 @@ function loadPedidosData() {
     `;
 }
 
-function loadClientesData() {
+async function loadClientesData() {
     const clientesDiv = document.getElementById('clientesLista');
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    
+    clientesDiv.innerHTML = `<div style="text-align: center; padding: 4rem; color: var(--text-medium);"><p>Cargando clientes...</p></div>`;
+
+    let users = [];
+    try {
+        const res = await fetch('api/admin/usuarios.php', { credentials: 'include' });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Error al obtener clientes');
+        users = data.usuarios || [];
+    } catch (err) {
+        clientesDiv.innerHTML = `
+            <div style="text-align: center; padding: 4rem; color: var(--text-medium);">
+                <p>No se pudo cargar la lista de clientes (${err.message})</p>
+            </div>
+        `;
+        return;
+    }
+
     if (users.length === 0) {
         clientesDiv.innerHTML = `
             <div style="text-align: center; padding: 4rem; color: var(--text-medium);">
@@ -233,7 +271,7 @@ function loadClientesData() {
         `;
         return;
     }
-    
+
     clientesDiv.innerHTML = `
         <table style="width: 100%; border-collapse: collapse;">
             <thead>
@@ -242,28 +280,23 @@ function loadClientesData() {
                     <th style="text-align: left; padding: 1rem; font-family: var(--font-accent); font-weight: 600; color: var(--primary-color);">Email</th>
                     <th style="text-align: left; padding: 1rem; font-family: var(--font-accent); font-weight: 600; color: var(--primary-color);">Teléfono</th>
                     <th style="text-align: left; padding: 1rem; font-family: var(--font-accent); font-weight: 600; color: var(--primary-color);">Fecha Registro</th>
-                    <th style="text-align: left; padding: 1rem; font-family: var(--font-accent); font-weight: 600; color: var(--primary-color);">Pedidos</th>
+                    <th style="text-align: left; padding: 1rem; font-family: var(--font-accent); font-weight: 600; color: var(--primary-color);">Citas</th>
                 </tr>
             </thead>
             <tbody>
-                ${users.map(user => {
-                    const orders = JSON.parse(localStorage.getItem('orders') || '[]');
-                    const userOrders = orders.filter(o => o.userId === user.id).length;
-                    
-                    return `
-                        <tr style="border-bottom: 1px solid var(--border-light);">
-                            <td style="padding: 1rem; font-weight: 500;">${user.nombre}</td>
-                            <td style="padding: 1rem; color: var(--text-medium);">${user.email}</td>
-                            <td style="padding: 1rem; color: var(--text-medium);">${user.telefono}</td>
-                            <td style="padding: 1rem; color: var(--text-medium);">${formatDate(user.fechaRegistro || new Date().toISOString())}</td>
-                            <td style="padding: 1rem;">
-                                <span style="padding: 0.375rem 0.875rem; background: var(--bg-accent); color: var(--primary-color); border-radius: 12px; font-size: 0.75rem; font-weight: 600;">
-                                    ${userOrders} ${userOrders === 1 ? 'pedido' : 'pedidos'}
-                                </span>
-                            </td>
-                        </tr>
-                    `;
-                }).join('')}
+                ${users.map(user => `
+                    <tr style="border-bottom: 1px solid var(--border-light);">
+                        <td style="padding: 1rem; font-weight: 500;">${user.nombre}</td>
+                        <td style="padding: 1rem; color: var(--text-medium);">${user.email}</td>
+                        <td style="padding: 1rem; color: var(--text-medium);">${user.telefono}</td>
+                        <td style="padding: 1rem; color: var(--text-medium);">${formatDate(user.fecha_registro)}</td>
+                        <td style="padding: 1rem;">
+                            <span style="padding: 0.375rem 0.875rem; background: var(--bg-accent); color: var(--primary-color); border-radius: 12px; font-size: 0.75rem; font-weight: 600;">
+                                ${user.total_citas} ${user.total_citas == 1 ? 'cita' : 'citas'}
+                            </span>
+                        </td>
+                    </tr>
+                `).join('')}
             </tbody>
         </table>
     `;
@@ -305,11 +338,8 @@ function formatTimeAgo(date) {
 // =====================================================
 
 function viewCita(id) {
-    const appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const apt = appointments.find(a => a.id === id);
-    if (!apt) return;
-    const user = users.find(u => u.id === apt.userId);
+    const cita = citasCache.find(c => c.id_cita === id);
+    if (!cita) return;
 
     // Modal inline de detalle/edición
     const existingModal = document.getElementById('citaModal');
@@ -321,43 +351,28 @@ function viewCita(id) {
     modal.innerHTML = `
         <div style="background:#fff;border-radius:12px;padding:2rem;max-width:520px;width:100%;position:relative;max-height:90vh;overflow-y:auto;">
             <button onclick="document.getElementById('citaModal').remove()" style="position:absolute;top:1rem;right:1rem;background:none;border:none;font-size:1.5rem;cursor:pointer;color:#666;">&times;</button>
-            <h3 style="font-family:var(--font-heading);font-size:1.5rem;color:var(--primary-color);margin-bottom:1.5rem;">Detalle de Cita #${apt.id}</h3>
+            <h3 style="font-family:var(--font-heading);font-size:1.5rem;color:var(--primary-color);margin-bottom:1.5rem;">Detalle de Cita #${cita.id_cita}</h3>
             
             <div style="margin-bottom:1.5rem;padding:1rem;background:#f9f9f9;border-radius:8px;border-left:4px solid var(--secondary-color);">
-                <p><strong>Cliente:</strong> ${user ? user.nombre + ' (' + user.email + ')' : 'Desconocido'}</p>
-                <p style="margin-top:0.5rem;"><strong>Tipo:</strong> ${getTipoCitaLabel(apt.tipo)}</p>
-                <p style="margin-top:0.5rem;"><strong>Comentarios:</strong> ${apt.comentarios || 'Sin comentarios'}</p>
+                <p><strong>Cliente:</strong> ${cita.cliente_nombre} (${cita.cliente_email})</p>
+                <p style="margin-top:0.5rem;"><strong>Tipo:</strong> ${getTipoCitaLabel(cita.tipo)}</p>
+                <p style="margin-top:0.5rem;"><strong>Comentarios:</strong> ${cita.comentarios || 'Sin comentarios'}</p>
             </div>
 
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
-                <div>
-                    <label style="display:block;font-weight:600;margin-bottom:0.4rem;font-size:0.875rem;color:var(--text-medium);">Fecha</label>
-                    <input type="date" id="editFecha" value="${apt.fecha}" style="width:100%;padding:0.75rem;border:1px solid #ddd;border-radius:6px;">
-                </div>
-                <div>
-                    <label style="display:block;font-weight:600;margin-bottom:0.4rem;font-size:0.875rem;color:var(--text-medium);">Hora</label>
-                    <input type="time" id="editHora" value="${apt.hora}" style="width:100%;padding:0.75rem;border:1px solid #ddd;border-radius:6px;">
-                </div>
-            </div>
             <div style="margin-bottom:1.5rem;">
                 <label style="display:block;font-weight:600;margin-bottom:0.4rem;font-size:0.875rem;color:var(--text-medium);">Estado</label>
                 <select id="editEstado" style="width:100%;padding:0.75rem;border:1px solid #ddd;border-radius:6px;">
-                    <option value="Pendiente" ${apt.estado==='Pendiente'?'selected':''}>Pendiente</option>
-                    <option value="Confirmada" ${apt.estado==='Confirmada'?'selected':''}>Confirmada</option>
-                    <option value="Completada" ${apt.estado==='Completada'?'selected':''}>Completada</option>
-                    <option value="Cancelada" ${apt.estado==='Cancelada'?'selected':''}>Cancelada</option>
+                    <option value="pendiente" ${cita.estado==='pendiente'?'selected':''}>Pendiente</option>
+                    <option value="confirmada" ${cita.estado==='confirmada'?'selected':''}>Confirmada</option>
+                    <option value="cancelada" ${cita.estado==='cancelada'?'selected':''}>Cancelada</option>
                 </select>
-            </div>
-            <div style="margin-bottom:1.5rem;">
-                <label style="display:block;font-weight:600;margin-bottom:0.4rem;font-size:0.875rem;color:var(--text-medium);">Notas del admin</label>
-                <textarea id="editNotas" rows="3" style="width:100%;padding:0.75rem;border:1px solid #ddd;border-radius:6px;resize:vertical;">${apt.notasAdmin || ''}</textarea>
             </div>
 
             <div style="display:flex;gap:1rem;justify-content:flex-end;">
-                <button onclick="eliminarCita(${apt.id})" style="padding:0.75rem 1.5rem;background:#dc3545;color:white;border:none;border-radius:6px;cursor:pointer;font-weight:600;">
+                <button onclick="eliminarCita(${cita.id_cita})" style="padding:0.75rem 1.5rem;background:#dc3545;color:white;border:none;border-radius:6px;cursor:pointer;font-weight:600;">
                     Eliminar
                 </button>
-                <button onclick="guardarCita(${apt.id})" style="padding:0.75rem 1.5rem;background:var(--secondary-color);color:white;border:none;border-radius:6px;cursor:pointer;font-weight:600;">
+                <button onclick="guardarCita(${cita.id_cita})" style="padding:0.75rem 1.5rem;background:var(--secondary-color);color:white;border:none;border-radius:6px;cursor:pointer;font-weight:600;">
                     Guardar cambios
                 </button>
             </div>
@@ -367,36 +382,46 @@ function viewCita(id) {
     modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
 }
 
-function guardarCita(id) {
-    const appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
-    const idx = appointments.findIndex(a => a.id === id);
-    if (idx === -1) return;
+async function guardarCita(id) {
+    const estado = document.getElementById('editEstado').value;
+    try {
+        const res = await fetch('api/admin/citas-actualizar.php', {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id_cita: id, estado })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Error al actualizar');
 
-    appointments[idx].fecha = document.getElementById('editFecha').value;
-    appointments[idx].hora = document.getElementById('editHora').value;
-    appointments[idx].estado = document.getElementById('editEstado').value;
-    appointments[idx].notasAdmin = document.getElementById('editNotas').value;
-
-    localStorage.setItem('appointments', JSON.stringify(appointments));
-    document.getElementById('citaModal').remove();
-    loadCitasData();
-    mostrarNotificacion('Cita actualizada correctamente', 'success');
+        document.getElementById('citaModal').remove();
+        await loadCitasData();
+        mostrarNotificacion('Cita actualizada correctamente', 'success');
+    } catch (err) {
+        mostrarNotificacion(err.message, 'warning');
+    }
 }
 
-function eliminarCita(id) {
+async function eliminarCita(id) {
     if (!confirm('¿Estás seguro de que deseas eliminar esta cita? Esta acción no se puede deshacer.')) return;
-    let appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
-    appointments = appointments.filter(a => a.id !== id);
-    localStorage.setItem('appointments', JSON.stringify(appointments));
-    document.getElementById('citaModal').remove();
-    loadCitasData();
-    // Update counter
-    const citasEl = document.getElementById('citasPendientes');
-    if (citasEl) {
-        const pending = appointments.filter(a => a.estado === 'Pendiente').length;
-        citasEl.textContent = pending;
+
+    try {
+        const res = await fetch('api/admin/citas-actualizar.php', {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id_cita: id, eliminar: true })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Error al eliminar');
+
+        const modalActual = document.getElementById('citaModal');
+        if (modalActual) modalActual.remove();
+        await loadCitasData();
+        mostrarNotificacion('Cita eliminada', 'warning');
+    } catch (err) {
+        mostrarNotificacion(err.message, 'warning');
     }
-    mostrarNotificacion('Cita eliminada', 'warning');
 }
 
 function mostrarNotificacion(msg, tipo = 'success') {

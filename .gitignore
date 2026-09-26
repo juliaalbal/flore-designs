@@ -7,3 +7,4 @@ vendor/
 # Archivos de editor
 .vscode/
 .DS_Store
+.git.zip

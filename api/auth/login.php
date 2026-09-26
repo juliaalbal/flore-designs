@@ -9,6 +9,7 @@
 // ============================================================
 
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../lib/validators.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') { responder(['ok' => true]); }
 if ($_SERVER['REQUEST_METHOD'] !== 'POST')    { responder(['error' => 'Método no permitido'], 405); }
@@ -17,7 +18,7 @@ $body     = obtenerBodyJSON();
 $email    = trim($body['email'] ?? '');
 $password = (string)($body['password'] ?? '');
 
-if ($email === '' || $password === '') {
+if (!camposObligatoriosCompletos([$email, $password])) {
     responder(['error' => 'Correo y contraseña son obligatorios'], 400);
 }
 

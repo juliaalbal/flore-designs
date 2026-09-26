@@ -10,6 +10,7 @@
 // ============================================================
 
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../lib/validators.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') { responder(['ok' => true]); }
 if ($_SERVER['REQUEST_METHOD'] !== 'POST')    { responder(['error' => 'Método no permitido'], 405); }
@@ -20,15 +21,15 @@ $email    = trim($body['email']    ?? '');
 $password = (string)($body['password'] ?? '');
 $telefono = trim($body['telefono'] ?? '');
 
-if ($nombre === '' || $email === '' || $password === '') {
+if (!camposObligatoriosCompletos([$nombre, $email, $password])) {
     responder(['error' => 'Nombre, correo y contraseña son obligatorios'], 400);
 }
 
-if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+if (!esCorreoValido($email)) {
     responder(['error' => 'El correo electrónico no es válido'], 400);
 }
 
-if (strlen($password) < 6) {
+if (!esPasswordValida($password)) {
     responder(['error' => 'La contraseña debe tener al menos 6 caracteres'], 400);
 }
 

@@ -238,11 +238,13 @@
 <script src="js/main.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    if (auth.isLoggedIn()) {
-        loadOrders();
-    } else {
-        document.getElementById('authRequired').style.display = 'block';
-    }
+    auth.onReady(() => {
+        if (auth.isLoggedIn()) {
+            loadOrders();
+        } else {
+            document.getElementById('authRequired').style.display = 'block';
+        }
+    });
 });
 
 function loadOrders() {

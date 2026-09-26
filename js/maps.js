@@ -5,11 +5,11 @@
    citas.html, junto al resto de la información de contacto.
 ===================================================== */
 
-// Coordenadas del atelier. Ajusta a la dirección real del negocio.
+// Coordenadas del atelier. 
 const UBICACION_ATELIER = {
-    lat: 21.8818,
-    lng: -102.2957,
-    direccion: 'Calle Pedro Coronel 123, Col. Bosque Norte, Aguascalientes, Ags.'
+    lat: 21.8549581,
+    lng: -102.3790467,
+    direccion: 'Calle 50 Aniversario, Santa Cruz de la Presa, Aguascalientes, Ags.'
 };
 
 async function initAtelierMap() {

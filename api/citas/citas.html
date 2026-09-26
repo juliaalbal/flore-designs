@@ -375,17 +375,27 @@ async function consultarClima(fecha) {
     }
 }
 
-function displayUserAppointments() {
+async function displayUserAppointments() {
     const userAppointmentsDiv = document.getElementById('userAppointments');
     const appointmentsList = document.getElementById('appointmentsList');
-    
-    const appointments = appointmentSystem.getUserAppointments(auth.getCurrentUser().id);
-    
+
+    let appointments = [];
+    try {
+        const res = await fetch('api/citas/mis-citas.php', { credentials: 'include' });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Error al obtener tus citas');
+        appointments = data.citas || [];
+    } catch (err) {
+        return; // si falla, simplemente no se muestra la lista (sin romper la página)
+    }
+
     if (appointments.length > 0) {
         userAppointmentsDiv.style.display = 'block';
-        
+
+        const colorEstado = { pendiente: '#4caf50', confirmada: '#4caf50', cancelada: '#ff9800' };
+
         appointmentsList.innerHTML = appointments.map(apt => `
-            <div class="alert ${apt.estado === 'Cancelada' ? 'warning' : 'info'}" style="margin-bottom: 1rem;">
+            <div class="alert ${apt.estado === 'cancelada' ? 'warning' : 'info'}" style="margin-bottom: 1rem;">
                 <div style="display: flex; justify-content: space-between; align-items: start;">
                     <div>
                         <strong style="display: block; margin-bottom: 0.5rem;">${getTipoCitaLabel(apt.tipo)}</strong>
@@ -393,18 +403,20 @@ function displayUserAppointments() {
                              ${formatDate(apt.fecha)} a las ${apt.hora}
                         </p>
                         ${apt.comentarios ? `<p style="font-size: 0.875rem; margin-top: 0.5rem; color: var(--text-medium);">${apt.comentarios}</p>` : ''}
-                        <span style="display: inline-block; margin-top: 0.5rem; padding: 0.25rem 0.75rem; background: ${apt.estado === 'Cancelada' ? '#ff9800' : '#4caf50'}; color: white; border-radius: 12px; font-size: 0.75rem; font-weight: 500;">
+                        <span style="display: inline-block; margin-top: 0.5rem; padding: 0.25rem 0.75rem; background: ${colorEstado[apt.estado] || '#999'}; color: white; border-radius: 12px; font-size: 0.75rem; font-weight: 500; text-transform: capitalize;">
                             ${apt.estado}
                         </span>
                     </div>
-                    ${apt.estado !== 'Cancelada' ? `
-                        <button onclick="cancelAppointment(${apt.id})" class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.875rem;">
+                    ${apt.estado !== 'cancelada' ? `
+                        <button onclick="cancelAppointment(${apt.id_cita})" class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.875rem;">
                             Cancelar
                         </button>
                     ` : ''}
                 </div>
             </div>
         `).join('');
+    } else {
+        userAppointmentsDiv.style.display = 'none';
     }
 }
 
@@ -419,11 +431,23 @@ function getTipoCitaLabel(tipo) {
     return labels[tipo] || tipo;
 }
 
-function cancelAppointment(id) {
-    if (confirm('¿Estás segura que deseas cancelar esta cita?')) {
-        appointmentSystem.cancelAppointment(id);
+async function cancelAppointment(id) {
+    if (!confirm('¿Estás segura que deseas cancelar esta cita?')) return;
+
+    try {
+        const res = await fetch('api/citas/cancelar.php', {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id_cita: id })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Error al cancelar');
+
         showNotification('Cita cancelada exitosamente', 'success');
         displayUserAppointments();
+    } catch (err) {
+        showNotification(err.message, 'error');
     }
 }
 </script>

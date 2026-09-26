@@ -282,14 +282,16 @@
 <script src="js/main.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    if (auth.isLoggedIn()) {
-        loadProfileData();
-    } else {
-        document.getElementById('authRequired').style.display = 'block';
-    }
+    auth.onReady(() => {
+        if (auth.isLoggedIn()) {
+            loadProfileData();
+        } else {
+            document.getElementById('authRequired').style.display = 'block';
+        }
+    });
 });
 
-function loadProfileData() {
+async function loadProfileData() {
     const user = auth.getCurrentUser();
     
     // Mostrar contenido del perfil
@@ -336,11 +338,19 @@ function loadProfileData() {
         `;
     }
     
-    // Próximas citas
-    const appointments = appointmentSystem.getUserAppointments(user.id)
-        .filter(apt => apt.estado !== 'Cancelada');
+    // Próximas citas (dato real, desde la base de datos vía api/citas/mis-citas.php)
     const upcomingAppointments = document.getElementById('upcomingAppointments');
-    
+    let appointments = [];
+    try {
+        const res = await fetch('api/citas/mis-citas.php', { credentials: 'include' });
+        const data = await res.json();
+        if (res.ok) {
+            appointments = (data.citas || []).filter(apt => apt.estado !== 'cancelada');
+        }
+    } catch (err) {
+        // si falla, se muestra como si no tuviera citas, sin romper el resto del perfil
+    }
+
     if (appointments.length > 0) {
         upcomingAppointments.innerHTML = appointments.slice(0, 2).map(apt => `
             <div class="alert success" style="margin-bottom: 0.75rem;">

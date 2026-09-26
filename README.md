@@ -49,17 +49,17 @@ Endpoints en `api/auth/` para autenticación, con sesiones PHP nativas:
 | `api/auth/login.php` | POST | Inicia sesión y valida el rol activo (RF-02.3, RF-02.4) |
 | `api/auth/logout.php` | POST | Cierra la sesión activa (RF-02.5) |
 | `api/auth/session.php` | GET | Devuelve el usuario autenticado en la sesión actual |
-| `api/maps/config.php` | GET | Expone la API key de Google Maps de forma centralizada |
+| `api/weather/pronostico.php` | GET | Consume OpenWeatherMap para mostrar el pronóstico del clima en la fecha de la cita |
 
 ### API de terceros
-**Google Maps JavaScript API** — muestra la ubicación real del atelier con un mapa interactivo y botón de direcciones en `citas.html`. Ver `js/maps.js`.
+**OpenWeatherMap** — muestra el pronóstico del clima para la fecha elegida al agendar una cita en `citas.html`, útil para sesiones de fotos al aire libre (bodas, quinceañeras). Ver `api/weather/pronostico.php`.
 
 ## Cómo correr el proyecto localmente
 
 1. Instala XAMPP (o equivalente) con PHP 8+ y MySQL.
 2. Crea la base de datos y ejecuta `api/config/schema.sql`.
 3. Copia `.env.example` a `.env` y ajusta `DB_HOST`, `DB_USER`, `DB_PASS` a tu MySQL local.
-4. Para el mapa de ubicación en `citas.html`, agrega tu propia `MAPS_API_KEY` en `.env` (consíguela en https://console.cloud.google.com/google/maps-apis y restríngela por dominio).
+4. Para el pronóstico del clima en `citas.html`, agrega tu propia `OPENWEATHER_API_KEY` en `.env` (regístrate gratis en https://openweathermap.org/api, solo pide correo, no pide tarjeta).
 5. Coloca el proyecto en `htdocs/` (o la carpeta pública de tu servidor).
 6. Regístrate desde el sitio; para volverte administrador ejecuta:
    `UPDATE usuarios SET rol='administrador' WHERE email='tu_correo@ejemplo.com';`
